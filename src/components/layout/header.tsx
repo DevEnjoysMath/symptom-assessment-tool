@@ -39,7 +39,7 @@ const Header = () => {
     <DialogContent className="sm:max-w-[725px]">
       <DialogHeader className="text-center">
         <Avatar className="h-24 w-24 mx-auto mb-4 border-4 border-primary/20">
-            <AvatarImage src={user?.photoURL || "https://placehold.co/100x100.png"} alt="User avatar" data-ai-hint="user profile photo" />
+            <AvatarImage src={user?.photoURL} alt="User avatar" />
             <AvatarFallback>
                 <User className="h-12 w-12" />
             </AvatarFallback>

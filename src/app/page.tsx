@@ -69,13 +69,12 @@ export default function Home() {
             </ul>
           </div>
           <div className="flex justify-center">
-             <Image 
-                src="https://placehold.co/600x600.png"
+             <Image
+                src="https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=600&h=600&fit=crop"
                 alt="Symptom Checker Interface"
                 width={550}
                 height={550}
                 className="rounded-xl shadow-2xl"
-                data-ai-hint="medical app"
              />
           </div>
         </div>
@@ -85,13 +84,12 @@ export default function Home() {
       <section className="w-full py-16 md:py-24 lg:py-32 bg-zinc-100/50">
         <div className="container px-4 md:px-6 grid md:grid-cols-2 gap-12 items-center">
           <div className="flex justify-center md:order-last">
-             <Image 
-                src="https://placehold.co/600x600.png"
+             <Image
+                src="https://images.unsplash.com/photo-1584982751601-97dcc096659c?w=600&h=600&fit=crop"
                 alt="Map with practitioner locations"
                 width={550}
                 height={550}
                 className="rounded-xl shadow-2xl"
-                data-ai-hint="Ireland map"
              />
           </div>
           <div className="space-y-4 md:order-first">
@@ -128,13 +126,12 @@ export default function Home() {
                     &quot;{testimonial.quote}&quot;
                   </blockquote>
                   <div className="flex items-center gap-4">
-                     <Image 
-                        src={`https://placehold.co/48x48.png`}
+                     <Image
+                        src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${testimonial.name}`}
                         alt={testimonial.name}
                         width={48}
                         height={48}
-                        className="rounded-full"
-                        data-ai-hint={testimonial.avatarHint}
+                        className="rounded-full bg-zinc-100"
                       />
                       <div>
                         <p className="font-semibold">{testimonial.name}</p>

@@ -1,10 +1,12 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 
-if (!process.env.NEXT_PUBLIC_GOOGLE_AI_API_KEY) {
-  throw new Error('GOOGLE_AI_API_KEY is not set');
+function getGenAI() {
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_AI_API_KEY;
+  if (!apiKey) {
+    throw new Error('NEXT_PUBLIC_GOOGLE_AI_API_KEY is not set. Please add it to your .env.local file.');
+  }
+  return new GoogleGenerativeAI(apiKey);
 }
-
-const genAI = new GoogleGenerativeAI(process.env.NEXT_PUBLIC_GOOGLE_AI_API_KEY);
 
 export interface SymptomAnalysisInput {
   symptoms: string;
@@ -18,14 +20,14 @@ export interface SymptomAnalysisOutput {
 }
 
 export async function analyzeSymptoms(input: SymptomAnalysisInput): Promise<SymptomAnalysisOutput> {
-  // Use Gemini 2.5 Flash which is the latest model optimized for performance and cost
-  const model = genAI.getGenerativeModel({ 
+  const genAI = getGenAI();
+  // Use Gemini 2.5 Flash
+  const model = genAI.getGenerativeModel({
     model: "gemini-2.5-flash",
     generationConfig: {
-      temperature: 0.9,
-      topP: 0.95,
-      topK: 64,
-      maxOutputTokens: 8192,
+      temperature: 0.7,
+      topP: 0.9,
+      maxOutputTokens: 4096,
     }
   });
 

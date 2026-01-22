@@ -32,7 +32,8 @@ const Header = () => {
 
   const navLinks = [
     { href: "/symptom-checker", label: "Symptom Checker" },
-    { href: "/find-practitioner", label: "Find a Practitioner" },
+    { href: "/find-practitioner", label: "Find Provider" },
+    { href: "/contact-gp", label: "Contact GP" },
   ];
 
   const profileDialog = (
@@ -55,23 +56,25 @@ const Header = () => {
 
   return (
     <header className={cn(
-        "sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-sm"
+        "sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/60"
     )}>
       <div className="container flex h-16 items-center">
         {/* Left Section */}
         <div className="flex items-center justify-start md:flex-1">
-          <Link href="/" className="flex items-center space-x-2">
-            <Stethoscope className="h-6 w-6 text-primary" />
-            <span className="hidden font-bold sm:inline-block">
+          <Link href="/" className="flex items-center space-x-2 group">
+            <div className="w-9 h-9 rounded-xl bg-primary flex items-center justify-center group-hover:scale-105 transition-transform">
+              <Stethoscope className="h-5 w-5 text-primary-foreground" />
+            </div>
+            <span className="hidden font-bold sm:inline-block text-lg">
               Emerald Health
             </span>
           </Link>
         </div>
 
         {/* Center Section: Desktop Navigation */}
-        <nav className="hidden items-center justify-center space-x-6 text-sm font-medium md:flex">
+        <nav className="hidden items-center justify-center space-x-8 text-sm font-medium md:flex">
           {navLinks.map(link => (
-            <Link key={link.href} href={link.href} className="transition-colors hover:text-primary text-foreground/60">
+            <Link key={link.href} href={link.href} className="relative transition-colors hover:text-primary text-foreground/70 py-2 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-all hover:after:w-full">
               {link.label}
             </Link>
           ))}

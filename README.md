@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>AI-Powered Healthcare for Ireland</strong><br/>
-  Built at Google Student AI Hackathon · Dublin · January 2025
+  Built at Google Student AI Hackathon · Dublin · June 2025
 </p>
 
 <p align="center">
@@ -26,7 +26,7 @@
 
 ## About
 
-48 hours. Google's Dublin office. 5 students who'd never met before. The theme was "AI for Healthcare."
+8 hours. Google's Dublin office. 5 students who'd never met before. The theme was "AI for Healthcare."
 
 We ended up building an AI symptom checker because navigating healthcare in Ireland is genuinely confusing - especially if you're new here or just don't know where to start. Describe what's wrong in plain English, upload a photo if it helps, and get a preliminary assessment that tells you whether you should probably see a doctor.
 
@@ -140,12 +140,7 @@ const model = genAI.getGenerativeModel({
 **What was hard:**
 - Gemini rate limits during testing (burned through quota fast)
 - The weight of knowing people might use this for real health decisions
-- Sleep deprivation is real
-
-**Next time:**
-- Set up CI/CD on day 1, not day 2
-- Write tests for AI response parsing
-- Error handling before it becomes a problem
+- Making the powerpoint and presenting it to the judges (Yes, we underestimated this part a little)
 
 ---
 
@@ -174,7 +169,7 @@ Open [localhost:3000](http://localhost:3000)
 
 <p align="center">
   5 strangers → teammates → actually friends now<br/>
-  <sub>Thanks to Google DSC for organizing and the Dublin office for hosting. The office is unreal btw.</sub>
+  <sub>Thanks to Google for organizing and the Dublin office for hosting. The office is unreal btw.</sub>
 </p>
 
 ---

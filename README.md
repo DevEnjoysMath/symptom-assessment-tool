@@ -1,147 +1,197 @@
-# 🍀 Emerald Health
+<p align="center">
+  <img src="public/demo/logo.png" alt="Emerald Health Logo" width="100"/>
+</p>
 
-**Built at the Google Student AI Hackathon @ Google Dublin Office**
+<h1 align="center">🍀 Emerald Health</h1>
 
-Healthcare theme. 48 hours. 5 students who just met. Way too much coffee.
+<p align="center">
+  <strong>AI-Powered Healthcare for Ireland</strong><br/>
+  Built at Google Student AI Hackathon · Dublin · January 2025
+</p>
 
-[Live Demo](https://emerald-health.vercel.app) · [Report Bug](https://github.com/DevEnjoysMath/symptom-assessment-tool/issues)
+<p align="center">
+  <a href="#about">About</a> •
+  <a href="#features">Features</a> •
+  <a href="#tech">Tech</a> •
+  <a href="#my-role">My Role</a> •
+  <a href="#learnings">Learnings</a> •
+  <a href="#team">Team</a>
+</p>
+
+<p align="center">
+  <a href="https://emerald-health.vercel.app">🌐 Live Demo</a>
+</p>
 
 ---
 
-## What is this?
+## About
 
-An AI symptom checker for Ireland. You describe what's wrong, optionally upload a photo, and our Gemini-powered AI gives you a preliminary assessment + tells you if you should probably see a doctor.
+48 hours. Google's Dublin office. 5 students who'd never met before. The theme was "AI for Healthcare."
 
-We also built a provider finder (search GPs/hospitals by location) and a contact page with Irish emergency numbers, telehealth options, etc.
+We ended up building an AI symptom checker because navigating healthcare in Ireland is genuinely confusing - especially if you're new here or just don't know where to start. Describe what's wrong in plain English, upload a photo if it helps, and get a preliminary assessment that tells you whether you should probably see a doctor.
 
-![Homepage](public/demo/hero-screenshot.png)
+Called it "Emerald" after the Emerald Isle. Green and white throughout because trust + Ireland.
 
----
-
-## The Hackathon
-
-**When:** January 2025
-**Where:** Google's Dublin office (yes, the actual Google office - still can't believe we got to work there)
-**Theme:** AI for Healthcare
-**Team size:** 5 people
-
-None of us knew each other before. We formed a team at the kickoff, brainstormed for like 2 hours, and landed on this idea because healthcare in Ireland can be genuinely confusing - especially if you're new here or don't know the system.
-
-The name "Emerald" comes from Ireland being called the Emerald Isle. Green and white theme throughout.
+<p align="center">
+  <img src="public/demo/hero-screenshot.png" alt="Homepage" width="700"/>
+</p>
 
 ---
 
 ## Features
 
-### Symptom Checker
-- Describe symptoms in plain English
-- Upload photos (rashes, swelling, etc.)
-- Get AI analysis with severity assessment
-- Clear "should I see a doctor?" guidance
+### 🩺 Symptom Checker
 
-![Symptom Checker](public/demo/symptom-checker.png)
+Type what's bothering you. The AI (Gemini 2.5 Flash) reads it, figures out what might be going on, and tells you:
+- What it could be
+- How serious it might be
+- Whether you should see someone
 
-### Find Provider
-- Search by city or Eircode
-- Filter: GPs, Hospitals, Specialists
-- One-tap calling and directions
+You can also upload photos - useful for rashes, swelling, stuff like that.
 
-![Find Provider](public/demo/find-provider.png)
+<p align="center">
+  <img src="public/demo/symptom-checker.png" alt="Symptom Checker" width="700"/>
+</p>
 
-### Contact GP
-- Emergency numbers (999, HSE Live, Samaritans, Poisons Centre)
-- Telehealth options with pricing
-- Dublin GP listings
+### 📍 Find Provider
 
-![Contact GP](public/demo/contact-gp.png)
+Search by city or Eircode. Filter by GPs, hospitals, or specialists. Tap to call, tap for directions.
 
----
+<p align="center">
+  <img src="public/demo/find-provider.png" alt="Find Provider" width="700"/>
+</p>
 
-## Tech Stack
+### 📞 Contact GP
 
-| What | Why |
-|------|-----|
-| Next.js 16 | React framework, handles routing nicely |
-| TypeScript | Catches bugs before users see them |
-| Tailwind CSS | Fast styling, crucial for hackathon speed |
-| Gemini 2.5 Flash | Google's AI - fast and can analyze images |
-| Radix UI | Accessible components out of the box |
-| Vercel | Easy deploys |
+Emergency numbers you might actually need (999, HSE Live, Samaritans, Poisons Centre). Telehealth options with pricing. GP practices you can call right now.
+
+<p align="center">
+  <img src="public/demo/contact-gp.png" alt="Contact GP" width="700"/>
+</p>
 
 ---
 
-## My Part
+## Tech
 
-I handled the backend and AI stuff:
+| Layer | Stack |
+|-------|-------|
+| Framework | Next.js 16 |
+| Language | TypeScript |
+| Styling | Tailwind CSS |
+| Components | Radix UI + shadcn/ui |
+| AI | Google Gemini 2.5 Flash |
+| Forms | React Hook Form + Zod |
+| Hosting | Vercel |
 
-- **API integration** - Connected everything to Google's Generative AI SDK
-- **Prompt engineering** - Spent a lot of time making the AI responses actually useful and not scary/irresponsible
-- **Image analysis** - Getting the photo upload to work with Gemini's multimodal capabilities
-- **Bug fixes** - Hydration errors, hook violations, the usual Next.js fun
-- **Deployment** - Fixed a CVE vulnerability last minute before Vercel would accept the deploy
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=typescript,react,nextjs,tailwind,vercel&theme=light" alt="Tech Stack"/>
+</p>
 
-The prompt engineering was honestly the hardest part. You want the AI to be helpful but also not diagnose people or tell them they're fine when they're not. Finding that balance took a lot of iteration.
+### Why these choices?
 
----
-
-## What I Learned
-
-**Stuff that went well:**
-- Splitting work by expertise actually works
-- Building the AI part first meant we knew the core feature worked before touching UI
-- Saying no to feature creep (we probably rejected 10+ ideas)
-
-**Stuff that was hard:**
-- Gemini rate limits during testing (we burned through quota fast)
-- The pressure of knowing people might actually use this for health decisions
-- Running on 4 hours of sleep
-
-**What I'd do differently:**
-- Set up proper error handling earlier
-- Write tests for the AI response parsing
-- Start deployment setup on day 1, not day 2
+- **TypeScript** because healthcare data shouldn't have "undefined is not a function" bugs
+- **Tailwind** because we had 48 hours and couldn't afford to fight CSS
+- **Gemini 2.5 Flash** because it's fast, multimodal (reads images), and we were at a Google hackathon
+- **Vercel** because one-click deploys when you're running on 4 hours of sleep
 
 ---
 
-## Run It Yourself
+## My Role
+
+I did the backend and AI integration:
+
+**API stuff**
+- Wired up Google's Generative AI SDK
+- Built the symptom analysis flow
+- Set up error handling so it fails gracefully
+
+**Prompt engineering**
+- This was harder than expected. You want the AI to be helpful but not diagnose anyone or say "you're fine" when they're not. Spent hours tweaking the system prompt to find that balance.
+
+**Image analysis**
+- Got photo uploads working with Gemini's multimodal input
+- Had to handle base64 encoding, file size limits, the works
+
+**Production fixes**
+- Hydration errors (classic Next.js)
+- React hook violations
+- A CVE vulnerability that blocked our Vercel deploy
+
+```typescript
+// The core of it
+const model = genAI.getGenerativeModel({
+  model: "gemini-2.5-flash",
+  generationConfig: {
+    temperature: 0.7,
+    maxOutputTokens: 4096,
+  }
+});
+```
+
+---
+
+## Learnings
+
+**What worked:**
+- Splitting by expertise - everyone owned their thing
+- Building the AI first, UI second - we knew the core worked before making it pretty
+- Saying no to features - rejected probably 10+ ideas to ship 3 good ones
+
+**What was hard:**
+- Gemini rate limits during testing (burned through quota fast)
+- The weight of knowing people might use this for real health decisions
+- Sleep deprivation is real
+
+**Next time:**
+- Set up CI/CD on day 1, not day 2
+- Write tests for AI response parsing
+- Error handling before it becomes a problem
+
+---
+
+## Run Locally
 
 ```bash
 git clone https://github.com/DevEnjoysMath/symptom-assessment-tool.git
 cd symptom-assessment-tool
 npm install
 
-# Create .env.local and add:
-# GOOGLE_GENAI_API_KEY=your_key_here
+# .env.local
+GOOGLE_GENAI_API_KEY=your_key
 
 npm run dev
 ```
 
-Then open http://localhost:3000
+Open [localhost:3000](http://localhost:3000)
 
 ---
 
-## The Team
+## Team
 
-![Team Photo](public/demo/team-photo.jpg)
+<p align="center">
+  <img src="public/demo/team-photo.jpg" alt="The team at Google Dublin" width="500"/>
+</p>
 
-5 strangers → teammates → actually friends now
-
-Thanks to Google DSC for organizing and the Google Dublin folks for hosting us. The office is insane btw.
+<p align="center">
+  5 strangers → teammates → actually friends now<br/>
+  <sub>Thanks to Google DSC for organizing and the Dublin office for hosting. The office is unreal btw.</sub>
+</p>
 
 ---
 
-## Future Ideas
+## What's Next
 
-- [ ] Irish language support
-- [ ] Symptom history/tracking
-- [ ] Better mental health resources
-- [ ] Real HSE API integration (if that's even possible)
+- [ ] Irish language support (Gaeilge)
+- [ ] Symptom history tracking
+- [ ] Mental health resources
+- [ ] HSE API integration
 
-PRs welcome if any of this interests you.
+PRs welcome.
 
 ---
 
 <p align="center">
-Built in Dublin 🇮🇪<br>
-Google Student AI Hackathon 2025
+  <img src="public/demo/irish-flag.png" alt="🇮🇪" width="40"/><br/>
+  <strong>Built in Dublin</strong><br/>
+  Google Student AI Hackathon 2025
 </p>

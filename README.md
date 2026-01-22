@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="public/demo/logo.png" alt="Emerald Health Logo" width="100"/>
-</p>
-
 <h1 align="center">🍀 Emerald Health</h1>
 
 <p align="center">

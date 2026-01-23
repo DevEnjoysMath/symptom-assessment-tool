@@ -170,10 +170,6 @@ Open [localhost:3000](http://localhost:3000)
 
 ---
 
-
-
----
-
 <p align="center">
   Google Student AI Hackathon 2025
 </p>

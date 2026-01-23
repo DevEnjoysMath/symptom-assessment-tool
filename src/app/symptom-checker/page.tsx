@@ -1,13 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import Link from "next/link";
-import { Loader2, AlertTriangle, CheckCircle, ArrowRight, Stethoscope, Clock, Shield, Activity, Search, User, Calendar, Heart, Upload, X, ArrowLeft, Sparkles } from "lucide-react";
+import { Loader2, AlertTriangle, CheckCircle, ArrowRight, Stethoscope, Clock, Shield, Activity, Search, User, Calendar, Upload, X, ArrowLeft, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/hooks/use-toast";
@@ -22,11 +21,23 @@ const symptomCheckerSchema = z.object({
 
 type SymptomCheckerFormValues = z.infer<typeof symptomCheckerSchema>;
 
+const exampleSymptoms = [
+  "Headache and fatigue",
+  "Sore throat",
+  "Back pain",
+  "Dizziness",
+];
+
 export default function SymptomCheckerPage() {
   const [analysis, setAnalysis] = useState<SymptomAnalysisOutput | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
   const { toast } = useToast();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const form = useForm<SymptomCheckerFormValues>({
     resolver: zodResolver(symptomCheckerSchema),
@@ -87,420 +98,377 @@ export default function SymptomCheckerPage() {
         return explanation.substring(markdownStart);
       }
       return explanation;
-    } catch (e) {
+    } catch {
       return explanation;
     }
   };
 
-  return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-b from-emerald-50 to-white py-12">
-        <div className="absolute inset-0 opacity-40" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2310b981' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-        }} />
+  const resetAnalysis = () => {
+    setAnalysis(null);
+    form.reset();
+    setImagePreview(null);
+  };
 
-        <div className="relative max-w-6xl mx-auto px-6">
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50/80 via-white to-white">
+      {/* Header */}
+      <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors mb-6"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors font-medium"
           >
             <ArrowLeft className="w-4 h-4" />
-            Back to Home
+            Back
           </Link>
-
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium mb-6">
-              <Sparkles className="w-4 h-4" />
-              Powered by Google Gemini AI
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center">
+              <Stethoscope className="w-4 h-4 text-white" />
             </div>
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-emerald-100 rounded-2xl mb-6">
-              <Stethoscope className="w-10 h-10 text-emerald-600" />
-            </div>
-            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">
-              Symptom Analysis
-            </h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Describe your symptoms and get instant AI-powered health insights.
-              This tool provides guidance but does not replace professional medical advice.
-            </p>
+            <span className="font-bold text-gray-900">Symptom Checker</span>
           </div>
+          <div className="w-16" /> {/* Spacer for centering */}
         </div>
-      </section>
+      </header>
 
       {/* Main Content */}
-      <section className="py-12 px-6">
-        <div className="max-w-6xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-            {/* Input Form */}
-            <div className="lg:col-span-1">
-              <Card className="shadow-xl border-0 bg-white">
-                <CardHeader className="pb-4">
-                  <CardTitle className="flex items-center gap-3 text-xl font-bold text-gray-900">
-                    <div className="w-10 h-10 rounded-xl bg-emerald-100 flex items-center justify-center">
-                      <Activity className="w-5 h-5 text-emerald-600" />
-                    </div>
-                    Describe Symptoms
-                  </CardTitle>
-                  <CardDescription className="text-gray-600">
-                    Be as detailed as possible for accurate analysis
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                      <FormField
-                        control={form.control}
-                        name="symptoms"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="text-base font-medium text-gray-900">
-                              What symptoms are you experiencing?
-                            </FormLabel>
-                            <FormControl>
-                              <Textarea
-                                placeholder="e.g., 'I have a persistent cough, fever, and feel very tired. The cough is worse at night...'"
-                                className="min-h-[140px] resize-none text-base border-2 border-gray-200 focus:border-emerald-500 rounded-xl"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
+      <main className="max-w-7xl mx-auto px-6 py-8">
+        <div className={`grid lg:grid-cols-5 gap-8 transition-all duration-500 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
 
-                      {/* Image Upload */}
-                      <div className="space-y-3">
-                        <FormLabel className="text-base font-medium text-gray-900">
-                          Upload a photo (optional)
-                        </FormLabel>
-
-                        {imagePreview ? (
-                          <div className="relative rounded-xl overflow-hidden border-2 border-emerald-200 bg-emerald-50">
-                            <img
-                              src={imagePreview}
-                              alt="Symptom preview"
-                              className="w-full h-40 object-cover"
-                            />
-                            <button
-                              type="button"
-                              onClick={removeImage}
-                              className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors shadow-lg"
-                            >
-                              <X className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ) : (
-                          <label className="relative block cursor-pointer">
-                            <div className="border-2 border-dashed border-gray-200 hover:border-emerald-400 rounded-xl p-6 text-center transition-all hover:bg-emerald-50 group">
-                              <Upload className="w-8 h-8 mx-auto text-gray-400 group-hover:text-emerald-600 transition-colors mb-2" />
-                              <p className="text-sm text-gray-500 group-hover:text-gray-700 transition-colors">
-                                Click to upload or drag and drop
-                              </p>
-                              <p className="text-xs text-gray-400 mt-1">
-                                PNG, JPG up to 10MB
-                              </p>
-                            </div>
-                            <input
-                              type="file"
-                              accept="image/*"
-                              onChange={handleImageChange}
-                              className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                            />
-                          </label>
-                        )}
-                      </div>
-
-                      <Button
-                        type="submit"
-                        disabled={isLoading}
-                        className="w-full h-14 text-lg font-semibold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-lg"
-                      >
-                        {isLoading ? (
-                          <>
-                            <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                            Analyzing...
-                          </>
-                        ) : (
-                          <>
-                            <Search className="mr-2 h-5 w-5" />
-                            Analyze Symptoms
-                          </>
-                        )}
-                      </Button>
-                    </form>
-                  </Form>
-                </CardContent>
-              </Card>
-
-              {/* Quick Actions */}
-              <div className="mt-6 space-y-3">
-                <Link
-                  href="/find-practitioner"
-                  className="w-full h-12 text-base border-2 border-gray-200 text-gray-700 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 font-medium rounded-xl transition-all flex items-center px-4"
-                >
-                  <User className="mr-3 h-5 w-5 text-emerald-600" />
-                  Find Healthcare Provider
-                  <ArrowRight className="ml-auto h-4 w-4 opacity-50" />
-                </Link>
-                <Link
-                  href="/contact-gp"
-                  className="w-full h-12 text-base border-2 border-gray-200 text-gray-700 hover:bg-emerald-50 hover:border-emerald-300 hover:text-emerald-700 font-medium rounded-xl transition-all flex items-center px-4"
-                >
-                  <Calendar className="mr-3 h-5 w-5 text-emerald-600" />
-                  Contact Your GP
-                  <ArrowRight className="ml-auto h-4 w-4 opacity-50" />
-                </Link>
+          {/* Left Panel - Input Form */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Form Card */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-lg shadow-gray-100/50 overflow-hidden">
+              <div className="p-6 border-b border-gray-100">
+                <h2 className="text-lg font-bold text-gray-900 mb-1">Describe your symptoms</h2>
+                <p className="text-sm text-gray-500">Be specific for better analysis</p>
               </div>
+
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="p-6 space-y-5">
+                  <FormField
+                    control={form.control}
+                    name="symptoms"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormControl>
+                          <Textarea
+                            placeholder="e.g., I've had a persistent headache for 3 days, worse in the morning..."
+                            className="min-h-[140px] resize-none border-gray-200 focus:border-emerald-500 focus:ring-emerald-500/20 rounded-xl text-base"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  {/* Quick symptom tags */}
+                  <div>
+                    <p className="text-xs text-gray-400 mb-2">Quick add:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {exampleSymptoms.map((symptom) => (
+                        <button
+                          key={symptom}
+                          type="button"
+                          onClick={() => {
+                            const current = form.getValues("symptoms");
+                            form.setValue("symptoms", current ? `${current}, ${symptom.toLowerCase()}` : symptom);
+                          }}
+                          className="px-3 py-1 text-xs font-medium text-gray-600 bg-gray-100 rounded-full hover:bg-emerald-100 hover:text-emerald-700 transition-colors"
+                        >
+                          + {symptom}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Image Upload */}
+                  <div>
+                    <p className="text-xs text-gray-400 mb-2">Photo (optional):</p>
+                    {imagePreview ? (
+                      <div className="relative rounded-xl overflow-hidden border border-emerald-200 bg-emerald-50">
+                        <img
+                          src={imagePreview}
+                          alt="Preview"
+                          className="w-full h-32 object-cover"
+                        />
+                        <button
+                          type="button"
+                          onClick={removeImage}
+                          className="absolute top-2 right-2 p-1.5 bg-white/90 text-gray-600 rounded-lg hover:bg-red-50 hover:text-red-600 transition-colors shadow-sm"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <label className="block cursor-pointer">
+                        <div className="border-2 border-dashed border-gray-200 hover:border-emerald-300 rounded-xl p-4 text-center transition-all hover:bg-emerald-50/50 group">
+                          <Upload className="w-6 h-6 mx-auto text-gray-400 group-hover:text-emerald-600 transition-colors mb-1" />
+                          <p className="text-sm text-gray-500 group-hover:text-gray-700">
+                            Upload image
+                          </p>
+                        </div>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageChange}
+                          className="hidden"
+                        />
+                      </label>
+                    )}
+                  </div>
+
+                  <Button
+                    type="submit"
+                    disabled={isLoading}
+                    className="w-full h-12 text-base font-semibold bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl shadow-lg shadow-emerald-600/20"
+                  >
+                    {isLoading ? (
+                      <>
+                        <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                        Analyzing...
+                      </>
+                    ) : (
+                      <>
+                        <Search className="mr-2 h-5 w-5" />
+                        Analyze Symptoms
+                      </>
+                    )}
+                  </Button>
+                </form>
+              </Form>
             </div>
 
-            {/* Results Section */}
-            <div className="lg:col-span-2">
-              {/* Analysis Results */}
-              {analysis && (
-                <div className="space-y-6">
-                  <Card className={`shadow-xl border-2 ${
-                    analysis.isSerious
-                      ? 'border-red-200 bg-gradient-to-br from-red-50 to-white'
-                      : 'border-emerald-200 bg-gradient-to-br from-emerald-50 to-white'
-                  }`}>
-                    <CardHeader className="pb-4">
-                      <CardTitle className="flex items-center gap-3 text-xl font-bold">
-                        {analysis.isSerious ? (
-                          <>
-                            <div className="p-3 bg-red-100 rounded-xl">
-                              <AlertTriangle className="h-6 w-6 text-red-600" />
-                            </div>
-                            <span className="text-red-700">Medical Attention Recommended</span>
-                          </>
-                        ) : (
-                          <>
-                            <div className="p-3 bg-emerald-100 rounded-xl">
-                              <CheckCircle className="h-6 w-6 text-emerald-600" />
-                            </div>
-                            <span className="text-emerald-700">Likely Not Serious</span>
-                          </>
-                        )}
-                      </CardTitle>
-                    </CardHeader>
-
-                    <CardContent className="space-y-6">
-                      {analysis.suggestImmediateAction && (
-                        <div className="bg-red-600 text-white rounded-xl p-5 shadow-lg">
-                          <div className="flex items-start gap-4">
-                            <div className="p-2 bg-white/20 rounded-lg">
-                              <AlertTriangle className="h-5 w-5" />
-                            </div>
-                            <div>
-                              <h4 className="font-bold text-lg mb-1">Seek Medical Care</h4>
-                              <p className="text-red-100">
-                                Based on your symptoms, we recommend consulting a healthcare provider promptly.
-                              </p>
-                            </div>
-                          </div>
-                        </div>
-                      )}
-
-                      <div className="bg-white rounded-xl p-6 border border-gray-100 shadow-inner">
-                        <div className="prose prose-base max-w-none">
-                          <ReactMarkdown
-                            components={{
-                              h1: ({children}) => (
-                                <div className="flex items-center gap-3 mb-4">
-                                  <div className="p-2 bg-emerald-100 rounded-lg">
-                                    <Shield className="h-4 w-4 text-emerald-600" />
-                                  </div>
-                                  <h1 className="text-lg font-bold text-gray-900 m-0">
-                                    {children}
-                                  </h1>
-                                </div>
-                              ),
-                              h2: ({children}) => (
-                                <div className="flex items-center gap-3 mb-3 mt-6">
-                                  <div className="p-1.5 bg-gray-100 rounded-lg">
-                                    <Clock className="h-3 w-3 text-gray-600" />
-                                  </div>
-                                  <h2 className="text-base font-semibold text-gray-900 m-0">
-                                    {children}
-                                  </h2>
-                                </div>
-                              ),
-                              ul: ({children}) => (
-                                <ul className="space-y-2 mt-3 ml-6">
-                                  {children}
-                                </ul>
-                              ),
-                              li: ({children}) => (
-                                <li className="text-gray-600 leading-relaxed text-base flex items-start gap-2">
-                                  <span className="text-emerald-600 mt-1.5">•</span>
-                                  <span>{children}</span>
-                                </li>
-                              ),
-                              p: ({children}) => (
-                                <p className="text-gray-600 leading-relaxed mb-3 text-base">
-                                  {children}
-                                </p>
-                              )
-                            }}
-                          >
-                            {parseExplanation(analysis.explanation)}
-                          </ReactMarkdown>
-                        </div>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <Link
-                          href="/find-practitioner"
-                          className="h-12 text-base font-medium border-2 border-gray-200 text-gray-700 hover:bg-emerald-50 hover:border-emerald-300 rounded-xl transition-all flex items-center justify-center gap-2 px-4"
-                        >
-                          <Stethoscope className="h-5 w-5 text-emerald-600" />
-                          Find Provider
-                          <ArrowRight className="ml-auto h-4 w-4 opacity-50" />
-                        </Link>
-                        <Link
-                          href="/contact-gp"
-                          className="h-12 text-base font-medium border-2 border-gray-200 text-gray-700 hover:bg-emerald-50 hover:border-emerald-300 rounded-xl transition-all flex items-center justify-center gap-2 px-4"
-                        >
-                          <Clock className="h-5 w-5 text-emerald-600" />
-                          Contact GP
-                          <ArrowRight className="ml-auto h-4 w-4 opacity-50" />
-                        </Link>
-                      </div>
-
-                      <div className="bg-emerald-50 rounded-xl p-5 border border-emerald-100">
-                        <div className="flex items-start gap-4">
-                          <div className="p-2 bg-emerald-100 rounded-lg">
-                            <Shield className="h-5 w-5 text-emerald-600" />
-                          </div>
-                          <div>
-                            <p className="font-semibold text-emerald-700 mb-1">
-                              Important Notice
-                            </p>
-                            <p className="text-gray-600 text-sm leading-relaxed">
-                              This is an AI-powered preliminary analysis and should not replace professional medical advice.
-                              If you're experiencing severe symptoms or are unsure, always consult a healthcare provider.
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
+            {/* Quick Links */}
+            <div className="space-y-3">
+              <Link
+                href="/find-practitioner"
+                className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:border-emerald-200 hover:shadow-md transition-all group"
+              >
+                <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
+                  <MapPin className="w-5 h-5 text-emerald-600" />
                 </div>
-              )}
+                <div className="flex-1">
+                  <p className="font-semibold text-gray-900 text-sm">Find a doctor</p>
+                  <p className="text-xs text-gray-500">GPs, hospitals, specialists</p>
+                </div>
+                <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-emerald-600 transition-colors" />
+              </Link>
 
-              {/* Loading State */}
-              {isLoading && (
-                <Card className="shadow-xl border-0 bg-white">
-                  <CardContent className="flex flex-col items-center justify-center py-20">
-                    <div className="relative w-24 h-24 mb-8">
-                      <div className="absolute inset-0 rounded-full border-4 border-emerald-100 animate-ping" style={{ animationDuration: '2s' }} />
-                      <div className="absolute inset-4 rounded-full border-4 border-emerald-200 animate-ping" style={{ animationDuration: '2s', animationDelay: '0.3s' }} />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <div className="w-16 h-16 bg-emerald-600 rounded-full flex items-center justify-center shadow-lg">
-                          <Stethoscope className="w-8 h-8 text-white" />
-                        </div>
-                      </div>
-                    </div>
-                    <h3 className="text-2xl font-bold mb-3 text-gray-900">
-                      Analyzing Your Symptoms
-                    </h3>
-                    <p className="text-gray-600 text-center max-w-md text-base leading-relaxed">
-                      Our AI is carefully reviewing your symptoms to provide the most accurate analysis possible.
-                    </p>
-                    <div className="flex gap-1.5 mt-6">
-                      <div className="w-2 h-2 bg-emerald-600 rounded-full animate-bounce" style={{ animationDelay: '0s' }} />
-                      <div className="w-2 h-2 bg-emerald-600 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
-                      <div className="w-2 h-2 bg-emerald-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
+              <Link
+                href="/contact-gp"
+                className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:border-emerald-200 hover:shadow-md transition-all group"
+              >
+                <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
+                  <Calendar className="w-5 h-5 text-emerald-600" />
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold text-gray-900 text-sm">Contact GP</p>
+                  <p className="text-xs text-gray-500">Emergency & telehealth</p>
+                </div>
+                <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-emerald-600 transition-colors" />
+              </Link>
+            </div>
 
-              {/* Empty State */}
-              {!analysis && !isLoading && (
-                <Card className="shadow-xl border-2 border-dashed border-gray-200 bg-gray-50/50">
-                  <CardContent className="flex flex-col items-center justify-center py-20 text-center">
-                    <div className="w-20 h-20 bg-emerald-100 rounded-2xl flex items-center justify-center mb-6">
-                      <Search className="w-10 h-10 text-emerald-600" />
-                    </div>
-                    <h3 className="text-xl font-bold mb-2 text-gray-900">
-                      Ready to Analyze
-                    </h3>
-                    <p className="text-gray-600 max-w-md leading-relaxed">
-                      Describe your symptoms in the form and click "Analyze Symptoms" to get an AI-powered preliminary analysis.
-                    </p>
-
-                    {/* Feature Pills */}
-                    <div className="flex flex-wrap justify-center gap-3 mt-8">
-                      <div className="flex items-center gap-2 px-4 py-2 bg-emerald-100 rounded-full text-sm text-emerald-700">
-                        <Shield className="w-4 h-4" />
-                        Private & Secure
-                      </div>
-                      <div className="flex items-center gap-2 px-4 py-2 bg-emerald-100 rounded-full text-sm text-emerald-700">
-                        <Sparkles className="w-4 h-4" />
-                        AI-Powered
-                      </div>
-                      <div className="flex items-center gap-2 px-4 py-2 bg-emerald-100 rounded-full text-sm text-emerald-700">
-                        <Clock className="w-4 h-4" />
-                        Instant Results
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              )}
+            {/* Trust indicator */}
+            <div className="flex items-center gap-2 text-xs text-gray-400 justify-center">
+              <Shield className="w-3.5 h-3.5" />
+              <span>Your data stays private</span>
             </div>
           </div>
 
-          {/* Bottom Info Cards */}
-          <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6">
-            <Card className="border-0 shadow-lg bg-white">
-              <CardHeader className="pb-3">
-                <CardTitle className="flex items-center gap-2 text-lg font-bold text-gray-900">
-                  <Shield className="h-5 w-5 text-emerald-600" /> How It Works
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="text-gray-600 text-sm">
-                <ol className="list-decimal ml-5 space-y-1">
-                  <li>Describe your symptoms in your own words</li>
-                  <li>Our AI analyzes your input for possible causes</li>
-                  <li>Get a clear, actionable summary and next steps</li>
-                </ol>
-              </CardContent>
-            </Card>
+          {/* Right Panel - Results */}
+          <div className="lg:col-span-3">
+            {/* Analysis Results */}
+            {analysis && (
+              <div className={`space-y-6 transition-all duration-500 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'}`}>
+                {/* Status Banner */}
+                <div className={`rounded-2xl p-6 ${
+                  analysis.isSerious
+                    ? 'bg-gradient-to-br from-red-50 to-orange-50 border border-red-100'
+                    : 'bg-gradient-to-br from-emerald-50 to-teal-50 border border-emerald-100'
+                }`}>
+                  <div className="flex items-start gap-4">
+                    <div className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                      analysis.isSerious ? 'bg-red-100' : 'bg-emerald-100'
+                    }`}>
+                      {analysis.isSerious ? (
+                        <AlertTriangle className="w-6 h-6 text-red-600" />
+                      ) : (
+                        <CheckCircle className="w-6 h-6 text-emerald-600" />
+                      )}
+                    </div>
+                    <div>
+                      <h2 className={`text-xl font-bold mb-1 ${
+                        analysis.isSerious ? 'text-red-900' : 'text-emerald-900'
+                      }`}>
+                        {analysis.isSerious ? 'Consider seeing a doctor' : 'Likely not serious'}
+                      </h2>
+                      <p className={`text-sm ${analysis.isSerious ? 'text-red-700' : 'text-emerald-700'}`}>
+                        {analysis.isSerious
+                          ? 'Based on your symptoms, a medical professional should evaluate this.'
+                          : 'Your symptoms suggest something manageable, but monitor for changes.'}
+                      </p>
+                    </div>
+                  </div>
 
-            <Card className="border-0 shadow-lg bg-white">
-              <CardContent className="flex flex-col gap-4 p-6">
-                <div className="flex items-center gap-3">
-                  <img
-                    src="https://api.dicebear.com/7.x/notionists/svg?seed=Deirdre"
-                    alt="Deirdre K."
-                    className="rounded-full w-12 h-12 bg-emerald-100"
-                  />
-                  <div>
-                    <p className="font-semibold text-gray-900">Deirdre K.</p>
-                    <p className="text-xs text-gray-500">Dublin</p>
+                  {analysis.suggestImmediateAction && (
+                    <div className="mt-4 bg-red-600 text-white rounded-xl p-4 flex items-center gap-3">
+                      <AlertTriangle className="w-5 h-5 flex-shrink-0" />
+                      <span className="font-medium">Seek medical attention promptly</span>
+                    </div>
+                  )}
+                </div>
+
+                {/* Detailed Analysis */}
+                <div className="bg-white rounded-2xl border border-gray-100 shadow-lg shadow-gray-100/50 overflow-hidden">
+                  <div className="p-6 border-b border-gray-100">
+                    <h3 className="font-bold text-gray-900">Detailed Analysis</h3>
+                  </div>
+                  <div className="p-6">
+                    <div className="prose prose-gray prose-sm max-w-none">
+                      <ReactMarkdown
+                        components={{
+                          h1: ({children}) => (
+                            <h2 className="text-lg font-bold text-gray-900 mb-3 mt-0 pb-2 border-b border-gray-100">
+                              {children}
+                            </h2>
+                          ),
+                          h2: ({children}) => (
+                            <h3 className="text-base font-semibold text-gray-800 mt-6 mb-2 flex items-center gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+                              {children}
+                            </h3>
+                          ),
+                          ul: ({children}) => (
+                            <ul className="space-y-1.5 my-3">
+                              {children}
+                            </ul>
+                          ),
+                          li: ({children}) => (
+                            <li className="text-gray-600 leading-relaxed pl-4 relative before:content-[''] before:absolute before:left-0 before:top-[0.6em] before:w-1.5 before:h-1.5 before:rounded-full before:bg-gray-300">
+                              {children}
+                            </li>
+                          ),
+                          p: ({children}) => (
+                            <p className="text-gray-600 leading-relaxed mb-3">
+                              {children}
+                            </p>
+                          ),
+                          strong: ({children}) => (
+                            <strong className="font-semibold text-gray-900">{children}</strong>
+                          ),
+                        }}
+                      >
+                        {parseExplanation(analysis.explanation)}
+                      </ReactMarkdown>
+                    </div>
+                  </div>
+
+                  {/* Actions */}
+                  <div className="bg-gray-50 border-t border-gray-100 p-4">
+                    <div className="flex flex-col sm:flex-row gap-3">
+                      <Link
+                        href="/find-practitioner"
+                        className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-600 text-white text-sm font-medium rounded-xl hover:bg-emerald-700 transition-colors"
+                      >
+                        <MapPin className="w-4 h-4" />
+                        Find a doctor
+                      </Link>
+                      <button
+                        onClick={resetAnalysis}
+                        className="flex-1 inline-flex items-center justify-center gap-2 px-5 py-2.5 border border-gray-200 text-gray-700 text-sm font-medium rounded-xl hover:bg-gray-50 transition-colors"
+                      >
+                        Check different symptoms
+                      </button>
+                    </div>
                   </div>
                 </div>
-                <blockquote className="italic text-gray-600 text-sm">
-                  "The analysis was surprisingly accurate and helped me decide to see a doctor sooner."
-                </blockquote>
-              </CardContent>
-            </Card>
 
-            <Card className="border-0 shadow-lg bg-white">
-              <CardContent className="flex items-center gap-3 p-6">
-                <div className="p-2 bg-emerald-100 rounded-lg">
-                  <Shield className="h-5 w-5 text-emerald-600" />
+                {/* Disclaimer */}
+                <div className="flex items-start gap-3 text-xs text-gray-500 bg-gray-50 rounded-xl p-4">
+                  <Shield className="w-4 h-4 mt-0.5 flex-shrink-0 text-gray-400" />
+                  <p>
+                    This is an AI-powered preliminary assessment. It does not replace professional medical advice.
+                    If you're concerned about your health, please consult a healthcare provider.
+                  </p>
                 </div>
-                <div>
-                  <p className="font-semibold text-gray-900 text-sm mb-1">Your privacy is protected</p>
-                  <p className="text-xs text-gray-500">We never store your personal health data.</p>
+              </div>
+            )}
+
+            {/* Loading State */}
+            {isLoading && (
+              <div className="bg-white rounded-2xl border border-gray-100 shadow-lg shadow-gray-100/50 p-12">
+                <div className="flex flex-col items-center justify-center">
+                  <div className="relative mb-8">
+                    <div className="w-20 h-20 rounded-full border-4 border-emerald-100" />
+                    <div className="absolute inset-0 w-20 h-20 rounded-full border-4 border-transparent border-t-emerald-500 animate-spin" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <Stethoscope className="w-8 h-8 text-emerald-600" />
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Analyzing symptoms</h3>
+                  <p className="text-gray-500 text-sm">This usually takes a few seconds...</p>
+                  <div className="flex gap-1 mt-6">
+                    <div className="w-2 h-2 bg-emerald-600 rounded-full animate-bounce" style={{ animationDelay: '0s' }} />
+                    <div className="w-2 h-2 bg-emerald-600 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }} />
+                    <div className="w-2 h-2 bg-emerald-600 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }} />
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
+              </div>
+            )}
+
+            {/* Empty State */}
+            {!analysis && !isLoading && (
+              <div className="bg-white rounded-2xl border-2 border-dashed border-gray-200 p-12">
+                <div className="flex flex-col items-center justify-center text-center">
+                  <div className="w-20 h-20 bg-emerald-100 rounded-2xl flex items-center justify-center mb-6">
+                    <Activity className="w-10 h-10 text-emerald-600" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-2">Ready to analyze</h3>
+                  <p className="text-gray-500 max-w-md mb-8">
+                    Describe your symptoms in the form on the left and we'll provide an AI-powered preliminary analysis.
+                  </p>
+
+                  {/* Info cards */}
+                  <div className="w-full max-w-lg space-y-3">
+                    <div className="flex items-center gap-3 p-4 bg-emerald-50 rounded-xl text-left">
+                      <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Shield className="w-5 h-5 text-emerald-600" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-900 text-sm">100% Private</p>
+                        <p className="text-xs text-gray-500">Your data never leaves your device</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 p-4 bg-emerald-50 rounded-xl text-left">
+                      <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Activity className="w-5 h-5 text-emerald-600" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-900 text-sm">Powered by Gemini 2.5</p>
+                        <p className="text-xs text-gray-500">Google's most advanced AI model</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-3 p-4 bg-emerald-50 rounded-xl text-left">
+                      <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <Clock className="w-5 h-5 text-emerald-600" />
+                      </div>
+                      <div>
+                        <p className="font-semibold text-gray-900 text-sm">Instant Results</p>
+                        <p className="text-xs text-gray-500">Get your analysis in seconds</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
-      </section>
+      </main>
     </div>
   );
 }

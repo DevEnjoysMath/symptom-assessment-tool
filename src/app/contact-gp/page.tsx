@@ -4,35 +4,27 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   Phone, Clock, MapPin, ArrowLeft, AlertCircle, CheckCircle2, Calendar,
-  MessageSquare, Video, Stethoscope, Shield, ExternalLink, Copy,
+  Video, Stethoscope, Shield, ExternalLink, Copy, ArrowRight,
   PhoneCall, Star, Building2
 } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
 
 const emergencyNumbers = [
-  { name: 'Emergency Services', number: '999 / 112', desc: 'For life-threatening emergencies', urgent: true },
-  { name: 'HSE Live', number: '1800 700 700', desc: 'Health information & advice line', urgent: false },
+  { name: 'Emergency', number: '999', desc: 'Life-threatening emergencies', urgent: true },
+  { name: 'HSE Live', number: '1800 700 700', desc: 'Health information line', urgent: false },
   { name: 'Samaritans', number: '116 123', desc: '24/7 emotional support', urgent: false },
-  { name: 'Poisons Centre', number: '01 809 2166', desc: 'Poisoning emergencies', urgent: false },
-];
-
-const gpServices = [
-  { icon: Stethoscope, title: 'General Consultations', desc: 'Routine check-ups, illness diagnosis, and treatment plans' },
-  { icon: Calendar, title: 'Appointment Booking', desc: 'Schedule in-person or phone consultations with your GP' },
-  { icon: Shield, title: 'Chronic Disease Management', desc: 'Ongoing care for diabetes, heart conditions, and more' },
-  { icon: CheckCircle2, title: 'Vaccinations', desc: 'Flu shots, travel vaccines, and childhood immunizations' },
-];
-
-const gpPractices = [
-  { name: 'Merrion Square Medical Practice', address: '15 Merrion Square, Dublin 2', phone: '+353 1 676 7544', hours: 'Mon-Fri: 8:30am - 6:00pm', rating: 4.8, acceptingNew: true },
-  { name: 'Dame Street Family Practice', address: '42 Dame Street, Dublin 2', phone: '+353 1 670 8899', hours: 'Mon-Fri: 9:00am - 5:30pm', rating: 4.6, acceptingNew: true },
-  { name: 'Ballsbridge Medical Centre', address: '88 Pembroke Road, Dublin 4', phone: '+353 1 668 1234', hours: 'Mon-Sat: 8:00am - 8:00pm', rating: 4.7, acceptingNew: false },
+  { name: 'Poisons', number: '01 809 2166', desc: 'Poisoning emergencies', urgent: false },
 ];
 
 const telehealthOptions = [
-  { name: 'VideoDoc', desc: 'Video consultations with Irish GPs, available 7 days a week', url: 'https://www.videodoc.ie', price: 'From €45' },
+  { name: 'VideoDoc', desc: 'Video consultations with Irish GPs, 7 days a week', url: 'https://www.videodoc.ie', price: 'From €45' },
   { name: 'Webdoctor', desc: 'Online GP consultations with same-day prescriptions', url: 'https://www.webdoctor.ie', price: 'From €35' },
-  { name: 'Laya Healthcare GP', desc: 'Virtual GP for Laya members, 24/7 access', url: 'https://www.layahealthcare.ie', price: 'Included with plan' },
+  { name: 'Laya Healthcare', desc: 'Virtual GP for Laya members, 24/7 access', url: 'https://www.layahealthcare.ie', price: 'With plan' },
+];
+
+const gpPractices = [
+  { name: 'Merrion Square Medical', address: '15 Merrion Square, Dublin 2', phone: '+353 1 676 7544', hours: 'Mon-Fri: 8:30am - 6pm', rating: 4.8, acceptingNew: true },
+  { name: 'Dame Street Family Practice', address: '42 Dame Street, Dublin 2', phone: '+353 1 670 8899', hours: 'Mon-Fri: 9am - 5:30pm', rating: 4.6, acceptingNew: true },
+  { name: 'Ballsbridge Medical Centre', address: '88 Pembroke Road, Dublin 4', phone: '+353 1 668 1234', hours: 'Mon-Sat: 8am - 8pm', rating: 4.7, acceptingNew: false },
 ];
 
 export default function ContactGPPage() {
@@ -48,198 +40,298 @@ export default function ContactGPPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <section className="relative bg-gradient-to-b from-emerald-50 to-white py-16">
-        <div className="absolute inset-0 opacity-40" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2310b981' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
-        }} />
-        <div className="relative max-w-5xl mx-auto px-6">
-          <Link href="/" className="inline-flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors mb-8">
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50/80 via-white to-white">
+      {/* Header */}
+      <header className="border-b border-gray-100 bg-white/80 backdrop-blur-sm sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-emerald-600 transition-colors font-medium"
+          >
             <ArrowLeft className="w-4 h-4" />
-            Back to Home
+            Back
           </Link>
-          <div className={`text-center ${mounted ? 'opacity-100' : 'opacity-0'} transition-opacity`}>
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-emerald-100 rounded-2xl mb-6">
-              <Phone className="w-10 h-10 text-emerald-600" />
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center">
+              <Phone className="w-4 h-4 text-white" />
             </div>
-            <h1 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-4">Contact Your GP</h1>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Find GP contact information, book appointments, or access telehealth services across Ireland.
-            </p>
+            <span className="font-bold text-gray-900">Contact GP</span>
           </div>
+          <div className="w-16" />
         </div>
-      </section>
+      </header>
 
-      <section className="py-12 px-6 bg-red-50 border-y border-red-100">
-        <div className="max-w-5xl mx-auto">
-          <div className="flex items-center gap-3 mb-6">
-            <AlertCircle className="w-6 h-6 text-red-600" />
-            <h2 className="text-xl font-bold text-gray-900">Emergency & Helpline Numbers</h2>
-          </div>
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {emergencyNumbers.map((item, i) => (
-              <div key={i} className={`p-4 rounded-xl ${item.urgent ? 'bg-red-600 text-white' : 'bg-white border border-gray-200'}`}>
-                <div className="flex items-start justify-between mb-2">
-                  <h3 className={`font-semibold ${item.urgent ? 'text-white' : 'text-gray-900'}`}>{item.name}</h3>
-                  <button onClick={() => copyToClipboard(item.number)} className={`p-1 rounded ${item.urgent ? 'hover:bg-red-500' : 'hover:bg-gray-100'}`} title="Copy number">
-                    {copiedNumber === item.number ? <CheckCircle2 className="w-4 h-4" /> : <Copy className="w-4 h-4 opacity-60" />}
-                  </button>
+      {/* Main Content */}
+      <main className="max-w-7xl mx-auto px-6 py-8">
+        <div className={`grid lg:grid-cols-5 gap-8 transition-all duration-500 ${mounted ? 'opacity-100' : 'opacity-0'}`}>
+
+          {/* Left Panel - Quick Actions */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Emergency Card */}
+            <div className="bg-white rounded-2xl border border-gray-100 shadow-lg shadow-gray-100/50 overflow-hidden">
+              <div className="p-6 border-b border-gray-100 bg-red-50">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-red-100 flex items-center justify-center">
+                    <AlertCircle className="w-5 h-5 text-red-600" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold text-gray-900">Emergency Numbers</h2>
+                    <p className="text-sm text-gray-500">For urgent situations</p>
+                  </div>
                 </div>
-                <a href={`tel:${item.number.replace(/\s/g, '')}`} className={`text-2xl font-bold block mb-1 hover:underline ${item.urgent ? 'text-white' : 'text-emerald-600'}`}>
-                  {item.number}
-                </a>
-                <p className={`text-sm ${item.urgent ? 'text-red-100' : 'text-gray-500'}`}>{item.desc}</p>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      <section className="py-16 px-6">
-        <div className="max-w-5xl mx-auto">
-          <div className="grid lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-12">
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">What Your GP Can Help With</h2>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  {gpServices.map((service, i) => (
-                    <div key={i} className="p-6 rounded-xl border border-gray-100 bg-white hover:shadow-md hover:border-emerald-200 transition-all">
-                      <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center mb-4">
-                        <service.icon className="w-6 h-6 text-emerald-600" />
-                      </div>
-                      <h3 className="font-semibold text-gray-900 mb-2">{service.title}</h3>
-                      <p className="text-gray-600 text-sm">{service.desc}</p>
+              <div className="p-4 space-y-3">
+                {emergencyNumbers.map((item, i) => (
+                  <div
+                    key={i}
+                    className={`p-4 rounded-xl flex items-center justify-between ${
+                      item.urgent
+                        ? 'bg-red-600 text-white'
+                        : 'bg-gray-50 hover:bg-emerald-50 transition-colors'
+                    }`}
+                  >
+                    <div>
+                      <p className={`font-semibold text-sm ${item.urgent ? 'text-white' : 'text-gray-900'}`}>
+                        {item.name}
+                      </p>
+                      <p className={`text-xs ${item.urgent ? 'text-red-100' : 'text-gray-500'}`}>
+                        {item.desc}
+                      </p>
                     </div>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center gap-3 mb-6">
-                  <Video className="w-6 h-6 text-emerald-600" />
-                  <h2 className="text-2xl font-bold text-gray-900">Online GP Consultations</h2>
-                </div>
-                <p className="text-gray-600 mb-6">Can't visit your GP in person? These telehealth services offer video consultations with licensed Irish doctors.</p>
-                <div className="space-y-4">
-                  {telehealthOptions.map((option, i) => (
-                    <div key={i} className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-6 rounded-xl border border-gray-100 bg-white hover:shadow-md hover:border-emerald-200 transition-all">
-                      <div>
-                        <h3 className="font-semibold text-gray-900 mb-1">{option.name}</h3>
-                        <p className="text-gray-600 text-sm">{option.desc}</p>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <span className="text-emerald-600 font-semibold whitespace-nowrap">{option.price}</span>
-                        <a href={option.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors whitespace-nowrap">
-                          Visit Site <ExternalLink className="w-4 h-4" />
-                        </a>
-                      </div>
+                    <div className="flex items-center gap-2">
+                      <a
+                        href={`tel:${item.number.replace(/\s/g, '')}`}
+                        className={`font-bold text-lg ${item.urgent ? 'text-white' : 'text-emerald-600'}`}
+                      >
+                        {item.number}
+                      </a>
+                      <button
+                        onClick={() => copyToClipboard(item.number)}
+                        className={`p-1.5 rounded-lg transition-colors ${
+                          item.urgent ? 'hover:bg-red-500' : 'hover:bg-gray-200'
+                        }`}
+                        title="Copy number"
+                      >
+                        {copiedNumber === item.number ? (
+                          <CheckCircle2 className="w-4 h-4" />
+                        ) : (
+                          <Copy className={`w-4 h-4 ${item.urgent ? 'text-red-200' : 'text-gray-400'}`} />
+                        )}
+                      </button>
                     </div>
-                  ))}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Quick Links */}
+            <div className="space-y-3">
+              <Link
+                href="/symptom-checker"
+                className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:border-emerald-200 hover:shadow-md transition-all group"
+              >
+                <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
+                  <Stethoscope className="w-5 h-5 text-emerald-600" />
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold text-gray-900 text-sm">Symptom Checker</p>
+                  <p className="text-xs text-gray-500">AI-powered analysis</p>
+                </div>
+                <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-emerald-600 transition-colors" />
+              </Link>
+
+              <Link
+                href="/find-practitioner"
+                className="flex items-center gap-3 p-4 bg-white rounded-xl border border-gray-100 hover:border-emerald-200 hover:shadow-md transition-all group"
+              >
+                <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center group-hover:bg-emerald-200 transition-colors">
+                  <MapPin className="w-5 h-5 text-emerald-600" />
+                </div>
+                <div className="flex-1">
+                  <p className="font-semibold text-gray-900 text-sm">Find Provider</p>
+                  <p className="text-xs text-gray-500">Search by location</p>
+                </div>
+                <ArrowRight className="w-4 h-4 text-gray-400 group-hover:text-emerald-600 transition-colors" />
+              </Link>
+            </div>
+
+            {/* When to see GP */}
+            <div className="bg-white rounded-2xl border border-gray-100 p-5">
+              <h3 className="font-bold text-gray-900 mb-4 text-sm">When to see your GP</h3>
+              <ul className="space-y-2.5">
+                {[
+                  'Symptoms lasting more than a few days',
+                  'Recurring health issues',
+                  'Prescription renewals',
+                  'Referrals to specialists',
+                  'Annual health check-ups'
+                ].map((item, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Medical Card Info */}
+            <div className="bg-blue-50 rounded-2xl p-5">
+              <h3 className="font-bold text-gray-900 mb-2 text-sm">Have a Medical Card?</h3>
+              <p className="text-xs text-gray-600 mb-3">
+                Medical card holders can access free GP visits. Check your eligibility on HSE.ie
+              </p>
+              <a
+                href="https://www2.hse.ie/services/medical-cards/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1"
+              >
+                Learn more <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+          </div>
+
+          {/* Right Panel - Content */}
+          <div className="lg:col-span-3 space-y-8">
+            {/* Telehealth Section */}
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center">
+                  <Video className="w-5 h-5 text-emerald-600" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900">Online GP Consultations</h2>
+                  <p className="text-sm text-gray-500">Video consultations with licensed Irish doctors</p>
                 </div>
               </div>
 
-              <div>
-                <h2 className="text-2xl font-bold text-gray-900 mb-6">GP Practices in Dublin</h2>
-                <div className="space-y-4">
-                  {gpPractices.map((gp, i) => (
-                    <div key={i} className="p-6 rounded-xl border border-gray-100 bg-white hover:shadow-md hover:border-emerald-200 transition-all">
-                      <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
-                        <div className="flex-1">
-                          <div className="flex items-start gap-3 mb-3">
-                            <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
-                              <Building2 className="w-6 h-6 text-emerald-600" />
-                            </div>
-                            <div>
-                              <h3 className="font-semibold text-gray-900">{gp.name}</h3>
-                              <div className="flex items-center gap-2 mt-1">
-                                <div className="flex items-center gap-1 text-amber-500">
-                                  <Star className="w-4 h-4 fill-current" />
-                                  <span className="text-sm text-gray-600">{gp.rating}</span>
-                                </div>
-                                <span className={`text-xs px-2 py-0.5 rounded-full ${gp.acceptingNew ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'}`}>
-                                  {gp.acceptingNew ? 'Accepting new patients' : 'Not accepting new patients'}
-                                </span>
+              <div className="space-y-3">
+                {telehealthOptions.map((option, i) => (
+                  <div
+                    key={i}
+                    className="bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-lg hover:border-emerald-200 transition-all"
+                  >
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-3 mb-1">
+                          <h3 className="font-bold text-gray-900">{option.name}</h3>
+                          <span className="text-xs font-medium text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full">
+                            {option.price}
+                          </span>
+                        </div>
+                        <p className="text-sm text-gray-500">{option.desc}</p>
+                      </div>
+                      <a
+                        href={option.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-xl hover:bg-emerald-700 transition-colors flex-shrink-0"
+                      >
+                        Visit
+                        <ExternalLink className="w-4 h-4" />
+                      </a>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* GP Practices Section */}
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <div className="w-10 h-10 rounded-lg bg-emerald-100 flex items-center justify-center">
+                  <Building2 className="w-5 h-5 text-emerald-600" />
+                </div>
+                <div>
+                  <h2 className="text-xl font-bold text-gray-900">GP Practices in Dublin</h2>
+                  <p className="text-sm text-gray-500">Local practices accepting patients</p>
+                </div>
+              </div>
+
+              <div className="space-y-3">
+                {gpPractices.map((gp, i) => (
+                  <div
+                    key={i}
+                    className="bg-white rounded-2xl border border-gray-100 p-5 hover:shadow-lg hover:border-emerald-200 transition-all"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center flex-shrink-0">
+                        <Stethoscope className="w-5 h-5 text-emerald-600" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-start justify-between gap-3 mb-2">
+                          <div>
+                            <h3 className="font-bold text-gray-900 mb-1">{gp.name}</h3>
+                            <div className="flex items-center gap-2 flex-wrap">
+                              <div className="flex items-center gap-1">
+                                <Star className="w-3.5 h-3.5 text-amber-400 fill-current" />
+                                <span className="text-xs text-gray-600">{gp.rating}</span>
                               </div>
+                              <span className={`text-xs px-2 py-0.5 rounded-full ${
+                                gp.acceptingNew
+                                  ? 'bg-green-50 text-green-700'
+                                  : 'bg-gray-100 text-gray-600'
+                              }`}>
+                                {gp.acceptingNew ? 'Accepting patients' : 'Not accepting'}
+                              </span>
                             </div>
-                          </div>
-                          <div className="grid sm:grid-cols-2 gap-2 text-sm text-gray-600 ml-15">
-                            <div className="flex items-center gap-2"><MapPin className="w-4 h-4 text-emerald-600" />{gp.address}</div>
-                            <div className="flex items-center gap-2"><Clock className="w-4 h-4 text-emerald-600" />{gp.hours}</div>
                           </div>
                         </div>
-                        <a href={`tel:${gp.phone}`} className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white font-medium rounded-lg hover:bg-emerald-700 transition-colors">
-                          <PhoneCall className="w-4 h-4" />Call
-                        </a>
+
+                        <div className="space-y-1.5 text-sm text-gray-600 mb-4">
+                          <div className="flex items-center gap-2">
+                            <MapPin className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                            <span className="truncate">{gp.address}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Clock className="w-4 h-4 text-gray-400 flex-shrink-0" />
+                            <span>{gp.hours}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex gap-2">
+                          <a
+                            href={`tel:${gp.phone}`}
+                            className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-xl hover:bg-emerald-700 transition-colors"
+                          >
+                            <PhoneCall className="w-4 h-4" />
+                            Call
+                          </a>
+                          <a
+                            href={`https://maps.google.com/?q=${encodeURIComponent(gp.address)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 inline-flex items-center justify-center gap-2 px-4 py-2 border border-gray-200 text-gray-700 text-sm font-medium rounded-xl hover:bg-gray-50 hover:border-emerald-200 transition-colors"
+                          >
+                            <MapPin className="w-4 h-4" />
+                            Directions
+                          </a>
+                        </div>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  </div>
+                ))}
               </div>
             </div>
 
-            <div className="space-y-6">
-              <Card className="sticky top-6 shadow-lg border-0 bg-gradient-to-b from-emerald-50 to-white">
-                <CardContent className="p-6">
-                  <h3 className="font-bold text-gray-900 mb-4">Quick Actions</h3>
-                  <div className="space-y-3">
-                    <a href="tel:999" className="flex items-center gap-3 p-4 bg-red-600 text-white rounded-xl hover:bg-red-700 transition-colors">
-                      <Phone className="w-5 h-5" />
-                      <div><div className="font-semibold">Emergency</div><div className="text-sm text-red-100">Call 999 or 112</div></div>
-                    </a>
-                    <a href="tel:1800700700" className="flex items-center gap-3 p-4 bg-emerald-600 text-white rounded-xl hover:bg-emerald-700 transition-colors">
-                      <MessageSquare className="w-5 h-5" />
-                      <div><div className="font-semibold">HSE Live</div><div className="text-sm text-emerald-100">Health advice line</div></div>
-                    </a>
-                    <Link href="/find-practitioner" className="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-xl hover:border-emerald-500 hover:bg-emerald-50 transition-colors">
-                      <MapPin className="w-5 h-5 text-emerald-600" />
-                      <div><div className="font-semibold text-gray-900">Find Provider</div><div className="text-sm text-gray-500">Search by location</div></div>
-                    </Link>
-                    <Link href="/symptom-checker" className="flex items-center gap-3 p-4 border-2 border-gray-200 rounded-xl hover:border-emerald-500 hover:bg-emerald-50 transition-colors">
-                      <Stethoscope className="w-5 h-5 text-emerald-600" />
-                      <div><div className="font-semibold text-gray-900">Symptom Checker</div><div className="text-sm text-gray-500">AI health analysis</div></div>
-                    </Link>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-0 shadow-lg">
-                <CardContent className="p-6">
-                  <h3 className="font-bold text-gray-900 mb-4">When to See Your GP</h3>
-                  <ul className="space-y-3 text-sm text-gray-600">
-                    {['Symptoms lasting more than a few days', 'Recurring health issues or concerns', 'Prescription renewals or medication reviews', 'Referrals to specialists', 'Annual health check-ups'].map((item, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 flex-shrink-0" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
-
-              <Card className="border-0 shadow-lg bg-blue-50">
-                <CardContent className="p-6">
-                  <h3 className="font-bold text-gray-900 mb-3">Have a Medical Card?</h3>
-                  <p className="text-sm text-gray-600 mb-4">Medical card holders can access free GP visits. Check your eligibility or find a GP who accepts medical cards.</p>
-                  <a href="https://www2.hse.ie/services/medical-cards/" target="_blank" rel="noopener noreferrer" className="text-sm text-emerald-600 hover:text-emerald-700 font-medium flex items-center gap-1">
-                    Learn more on HSE.ie <ExternalLink className="w-3 h-3" />
-                  </a>
-                </CardContent>
-              </Card>
+            {/* CTA Banner */}
+            <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-2xl p-8 text-white">
+              <h2 className="text-2xl font-bold mb-2">Not sure if you need a GP?</h2>
+              <p className="text-emerald-100 mb-6">
+                Use our AI symptom checker for a preliminary assessment and guidance.
+              </p>
+              <Link
+                href="/symptom-checker"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-white text-emerald-600 font-semibold rounded-xl hover:bg-emerald-50 transition-colors"
+              >
+                <Stethoscope className="w-5 h-5" />
+                Check Your Symptoms
+              </Link>
             </div>
           </div>
         </div>
-      </section>
-
-      <section className="py-12 px-6 bg-emerald-600">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-2xl sm:text-3xl font-bold text-white mb-4">Not sure if you need to see a GP?</h2>
-          <p className="text-emerald-100 mb-8 max-w-2xl mx-auto">Use our AI symptom checker to get a preliminary assessment and guidance on whether you should seek medical attention.</p>
-          <Link href="/symptom-checker" className="inline-flex items-center gap-2 px-8 py-4 bg-white text-emerald-600 font-semibold rounded-xl hover:bg-emerald-50 transition-colors shadow-lg">
-            <Stethoscope className="w-5 h-5" />
-            Check Your Symptoms
-          </Link>
-        </div>
-      </section>
+      </main>
     </div>
   );
 }

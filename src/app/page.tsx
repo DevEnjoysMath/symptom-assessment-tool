@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowRight, Activity, Stethoscope, MapPin, Clock, Star, ExternalLink, Shield, Heart, Users, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Activity, Stethoscope, MapPin, Clock, Star, ExternalLink, Shield, Heart, CheckCircle2, Zap } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState, useRef } from 'react';
 
@@ -11,7 +11,6 @@ const hospitals = [
   { name: 'Beaumont Hospital', rating: 3.4, address: 'Beaumont Rd, Dublin 9', phone: '(01) 809 3000', isOpen: true, website: 'https://www.beaumont.ie' },
 ];
 
-// Intersection observer for scroll animations
 function useInView(threshold = 0.1) {
   const ref = useRef<HTMLDivElement>(null);
   const [inView, setInView] = useState(false);
@@ -28,31 +27,6 @@ function useInView(threshold = 0.1) {
   return { ref, inView };
 }
 
-// Animated counter
-function AnimatedNumber({ value, suffix = '' }: { value: number; suffix?: string }) {
-  const { ref, inView } = useInView();
-  const [displayed, setDisplayed] = useState(0);
-  const started = useRef(false);
-
-  useEffect(() => {
-    if (!inView || started.current) return;
-    started.current = true;
-    const duration = 2000;
-    const startTime = performance.now();
-
-    const animate = (currentTime: number) => {
-      const elapsed = currentTime - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 3);
-      setDisplayed(Math.floor(eased * value));
-      if (progress < 1) requestAnimationFrame(animate);
-    };
-    requestAnimationFrame(animate);
-  }, [inView, value]);
-
-  return <span ref={ref}>{displayed.toLocaleString()}{suffix}</span>;
-}
-
 export default function Home() {
   const [mounted, setMounted] = useState(false);
 
@@ -60,124 +34,148 @@ export default function Home() {
     setMounted(true);
   }, []);
 
-  const features = [
-    {
-      icon: Activity,
-      title: 'Intelligent Symptom Analysis',
-      desc: 'Describe your symptoms in everyday language. Our AI understands context and provides meaningful health insights.'
-    },
-    {
-      icon: Shield,
-      title: 'Complete Privacy',
-      desc: 'Your health data stays on your device. No accounts required, no data stored on servers.'
-    },
-    {
-      icon: Heart,
-      title: 'Trusted by Irish Families',
-      desc: 'Built specifically for the Irish healthcare system, connecting you with local providers and services.'
-    },
-    {
-      icon: Users,
-      title: 'Healthcare Network',
-      desc: 'Access our network of 500+ verified healthcare providers across all 26 counties.'
-    },
-  ];
-
   const steps = [
-    { num: '1', title: 'Describe Your Symptoms', desc: 'Tell us how you feel using plain language. No medical terminology needed.', icon: Stethoscope },
-    { num: '2', title: 'Get AI Analysis', desc: 'Receive an assessment of your symptoms with potential conditions to discuss with your doctor.', icon: Activity },
-    { num: '3', title: 'Find Care Nearby', desc: 'Connect with healthcare providers in your area who can help with your specific needs.', icon: MapPin },
+    { num: '1', title: 'Describe Your Symptoms', desc: 'Tell us how you feel using plain language. Upload a photo if it helps.', icon: Stethoscope },
+    { num: '2', title: 'Get AI Analysis', desc: 'Receive an instant assessment with potential conditions to discuss with your doctor.', icon: Activity },
+    { num: '3', title: 'Find Care Nearby', desc: 'Connect with healthcare providers in your area who can help.', icon: MapPin },
   ];
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-x-hidden">
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-emerald-50 to-white">
-        {/* Subtle pattern */}
-        <div className="absolute inset-0 opacity-40" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2310b981' fill-opacity='0.08'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+      <section className="relative min-h-[95vh] flex items-center">
+        {/* Background with gradient mesh */}
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 via-white to-emerald-50/50" />
+
+        {/* Animated gradient orbs */}
+        <div className="absolute top-1/4 -left-32 w-96 h-96 bg-emerald-200/30 rounded-full blur-3xl animate-pulse" />
+        <div className="absolute bottom-1/4 -right-32 w-80 h-80 bg-emerald-100/40 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+
+        {/* Grid pattern overlay */}
+        <div className="absolute inset-0 opacity-[0.015]" style={{
+          backgroundImage: `linear-gradient(#10b981 1px, transparent 1px), linear-gradient(90deg, #10b981 1px, transparent 1px)`,
+          backgroundSize: '60px 60px'
         }} />
 
-        <div className="relative max-w-6xl mx-auto px-6 pt-20 pb-32">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            {/* Left content */}
-            <div className={`${mounted ? 'animate-fade-in-up' : 'opacity-0'}`}>
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 text-emerald-700 text-sm font-medium mb-8">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-600" />
-                </span>
-                Trusted by 50,000+ Irish users
-              </div>
+        <div className="relative max-w-7xl mx-auto px-6 py-20 w-full">
+          <div className="grid lg:grid-cols-2 gap-20 items-center">
+            {/* Left - Main content */}
+            <div className={`transition-all duration-1000 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
 
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
-                Understand your health with{' '}
-                <span className="text-emerald-600">confidence</span>
+              {/* Headline */}
+              <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-gray-900 leading-[1.05] mb-8 tracking-tight">
+                Your health,
+                <br />
+                <span className="relative">
+                  <span className="text-emerald-600">understood</span>
+                  <span className="text-emerald-600">.</span>
+                  <svg className="absolute -bottom-2 left-0 w-full" viewBox="0 0 300 12" fill="none">
+                    <path d="M2 10C50 4 100 2 150 6C200 10 250 4 298 8" stroke="#10b981" strokeWidth="3" strokeLinecap="round" className="animate-draw" style={{ strokeDasharray: 300, strokeDashoffset: 300, animation: 'draw 1.5s ease forwards 0.5s' }} />
+                  </svg>
+                </span>
               </h1>
 
-              <p className="text-xl text-gray-600 mb-10 leading-relaxed">
-                Get instant, private symptom analysis powered by advanced AI.
-                Connect with healthcare providers across Ireland when you need them most.
+              {/* Subheadline */}
+              <p className="text-xl text-gray-600 mb-12 leading-relaxed max-w-lg">
+                Describe your symptoms in plain English. Get instant AI analysis.
+                Find the right healthcare provider near you.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-4">
+              {/* CTA Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 mb-12">
                 <Link
                   href="/symptom-checker"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-emerald-600 text-white font-semibold rounded-xl hover:bg-emerald-700 transition-colors shadow-lg shadow-emerald-600/25"
+                  className="group inline-flex items-center justify-center gap-3 px-8 py-5 bg-emerald-600 text-white font-semibold text-lg rounded-2xl hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-600/25 hover:shadow-xl hover:shadow-emerald-600/30 hover:-translate-y-0.5"
                 >
                   Check Your Symptoms
-                  <ArrowRight className="w-5 h-5" />
+                  <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
                 </Link>
                 <Link
                   href="/find-practitioner"
-                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-gray-700 font-semibold rounded-xl border-2 border-gray-200 hover:border-emerald-300 hover:text-emerald-700 transition-colors"
+                  className="inline-flex items-center justify-center gap-3 px-8 py-5 bg-white text-gray-700 font-semibold text-lg rounded-2xl border-2 border-gray-200 hover:border-emerald-400 hover:text-emerald-700 transition-all hover:-translate-y-0.5"
                 >
+                  <MapPin className="w-5 h-5" />
                   Find a Doctor
                 </Link>
               </div>
 
               {/* Trust indicators */}
-              <div className="flex items-center gap-6 mt-10 pt-10 border-t border-gray-200">
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-                  <span className="text-sm text-gray-600">Free to use</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-                  <span className="text-sm text-gray-600">No signup required</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-                  <span className="text-sm text-gray-600">100% private</span>
-                </div>
+              <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-gray-500 text-sm">
+                <span>No signup</span>
+                <span className="text-gray-300">•</span>
+                <span>Free forever</span>
+                <span className="text-gray-300">•</span>
+                <span>Data stays on your device</span>
               </div>
             </div>
 
-            {/* Right content - Stats card */}
-            <div className={`${mounted ? 'animate-fade-in-up' : 'opacity-0'}`} style={{ animationDelay: '200ms' }}>
-              <div className="bg-white rounded-3xl shadow-2xl shadow-gray-200/50 p-8 border border-gray-100">
-                <div className="text-center mb-8">
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-emerald-100 rounded-2xl mb-4">
-                    <Heart className="w-8 h-8 text-emerald-600" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900">Empowering Irish Healthcare</h3>
-                  <p className="text-gray-500 mt-2">Real-time health insights for everyone</p>
-                </div>
+            {/* Right - Interactive Demo Preview */}
+            <div className={`transition-all duration-1000 delay-200 ${mounted ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+              <div className="relative">
+                {/* Subtle glow behind card */}
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-emerald-600/10 rounded-[2.5rem] blur-2xl scale-105" />
 
-                <div className="grid grid-cols-2 gap-6">
-                  {[
-                    { value: 52847, label: 'Symptom Analyses', suffix: '+' },
-                    { value: 98, label: 'User Satisfaction', suffix: '%' },
-                    { value: 523, label: 'Healthcare Providers', suffix: '+' },
-                    { value: 26, label: 'Counties Covered', suffix: '' },
-                  ].map((stat, i) => (
-                    <div key={i} className="text-center p-4 rounded-2xl bg-gray-50">
-                      <div className="text-3xl font-bold text-emerald-600 mb-1">
-                        <AnimatedNumber value={stat.value} suffix={stat.suffix} />
-                      </div>
-                      <div className="text-sm text-gray-500">{stat.label}</div>
+                {/* Main card - Mock symptom checker interface */}
+                <div className="relative bg-white rounded-3xl shadow-2xl shadow-emerald-900/10 border border-gray-200/80 overflow-hidden">
+                  {/* Browser-like header */}
+                  <div className="bg-gray-50 border-b border-gray-200 px-4 py-3 flex items-center gap-3">
+                    <div className="flex gap-1.5">
+                      <div className="w-3 h-3 rounded-full bg-red-400" />
+                      <div className="w-3 h-3 rounded-full bg-amber-400" />
+                      <div className="w-3 h-3 rounded-full bg-emerald-400" />
                     </div>
-                  ))}
+                    <div className="flex-1 bg-white rounded-lg px-3 py-1.5 text-xs text-gray-400 font-mono border border-gray-200">
+                      emerald-health.vercel.app
+                    </div>
+                  </div>
+
+                  {/* App content */}
+                  <div className="p-6">
+                    {/* Mini header */}
+                    <div className="flex items-center gap-2 mb-6">
+                      <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center">
+                        <span className="text-white font-bold text-sm">E</span>
+                      </div>
+                      <span className="font-bold text-gray-900">Symptom Checker</span>
+                    </div>
+
+                    {/* Fake input */}
+                    <div className="mb-5">
+                      <div className="bg-gray-50 rounded-xl p-4 border border-gray-200">
+                        <p className="text-gray-600 text-sm leading-relaxed">
+                          <span className="text-gray-400">I've been having </span>
+                          <span className="text-gray-900 font-medium">headaches and feeling tired</span>
+                          <span className="text-gray-400"> for the past few days...</span>
+                          <span className="inline-block w-0.5 h-4 bg-emerald-500 ml-1 animate-pulse align-middle" />
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Fake AI response */}
+                    <div className="bg-gradient-to-br from-emerald-50 to-white rounded-xl p-4 border border-emerald-200/60">
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-lg bg-emerald-600 flex items-center justify-center flex-shrink-0">
+                          <Activity className="w-4 h-4 text-white" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-xs font-semibold text-emerald-700 mb-1">AI Analysis</p>
+                          <p className="text-sm text-gray-600 leading-relaxed">
+                            Based on your symptoms, this could be related to <span className="font-semibold text-gray-900">tension headaches</span> or <span className="font-semibold text-gray-900">fatigue</span>...
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Action buttons */}
+                    <div className="flex gap-2 mt-4">
+                      <div className="flex-1 bg-emerald-600 text-white text-xs font-semibold py-2.5 rounded-lg text-center">
+                        Find a Doctor
+                      </div>
+                      <div className="flex-1 bg-gray-100 text-gray-700 text-xs font-semibold py-2.5 rounded-lg text-center">
+                        Learn More
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -185,101 +183,171 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-24 bg-white">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-              Why families across Ireland trust us
-            </h2>
-            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-              Built with care for the Irish healthcare system, ensuring you get the support you need.
-            </p>
-          </div>
+      {/* How It Works - Horizontal Journey */}
+      <section className="py-32 bg-gradient-to-b from-white via-emerald-50/30 to-white relative overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute top-20 left-0 w-72 h-72 bg-emerald-100/50 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-0 w-96 h-96 bg-emerald-50 rounded-full blur-3xl" />
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {features.map((feature, i) => {
-              const { ref, inView } = useInView();
-              return (
-                <div
-                  key={i}
-                  ref={ref}
-                  className={`p-8 rounded-2xl border border-gray-100 bg-white hover:shadow-xl hover:shadow-gray-100/50 transition-all duration-300 ${
-                    inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
-                  }`}
-                  style={{ transitionDelay: `${i * 100}ms` }}
-                >
-                  <div className="w-14 h-14 rounded-xl bg-emerald-100 flex items-center justify-center mb-6">
-                    <feature.icon className="w-7 h-7 text-emerald-600" />
-                  </div>
-                  <h3 className="text-xl font-semibold text-gray-900 mb-3">{feature.title}</h3>
-                  <p className="text-gray-600 leading-relaxed">{feature.desc}</p>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* How It Works */}
-      <section className="py-24 bg-emerald-50">
-        <div className="max-w-5xl mx-auto px-6">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+        <div className="relative max-w-6xl mx-auto px-6">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
               How it works
             </h2>
-            <p className="text-xl text-gray-600">
-              Three simple steps to better understand your health
+            <p className="text-xl text-gray-500 max-w-lg mx-auto">
+              From symptoms to solutions in three steps
             </p>
           </div>
 
-          <div className="space-y-8">
+          {/* Steps as horizontal cards */}
+          <div className="grid lg:grid-cols-3 gap-6 lg:gap-0 relative">
+            {/* Connecting line for desktop */}
+            <div className="hidden lg:block absolute top-1/2 left-[16.67%] right-[16.67%] h-px bg-gradient-to-r from-emerald-300 via-emerald-400 to-emerald-300 -translate-y-1/2 z-0" />
+
             {steps.map((step, i) => {
               const { ref, inView } = useInView();
               return (
                 <div
                   key={i}
                   ref={ref}
-                  className={`flex flex-col md:flex-row items-start gap-6 p-8 bg-white rounded-2xl shadow-sm border border-gray-100 transition-all duration-500 ${
-                    inView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'
-                  }`}
+                  className={`relative z-10 transition-all duration-700 ${inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}
                   style={{ transitionDelay: `${i * 150}ms` }}
                 >
-                  <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-emerald-600 text-white font-bold text-2xl flex-shrink-0">
-                    {step.num}
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-semibold text-gray-900 mb-2">{step.title}</h3>
-                    <p className="text-gray-600 leading-relaxed">{step.desc}</p>
-                  </div>
-                  <div className="hidden md:flex items-center justify-center w-14 h-14 rounded-xl bg-emerald-100">
-                    <step.icon className="w-7 h-7 text-emerald-600" />
+                  <div className="bg-white rounded-3xl p-8 mx-auto max-w-sm border border-gray-100 shadow-lg shadow-gray-100/50 hover:shadow-xl hover:shadow-emerald-100/50 hover:-translate-y-1 transition-all duration-300">
+                    {/* Step number + icon row */}
+                    <div className="flex items-center justify-between mb-6">
+                      <span className="text-6xl font-black text-emerald-100">{step.num}</span>
+                      <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center shadow-lg shadow-emerald-500/25">
+                        <step.icon className="w-7 h-7 text-white" />
+                      </div>
+                    </div>
+
+                    {/* Content */}
+                    <h3 className="text-xl font-bold text-gray-900 mb-3">{step.title}</h3>
+                    <p className="text-gray-500 leading-relaxed">{step.desc}</p>
+
+                    {/* Arrow indicator for non-last items on mobile */}
+                    {i < steps.length - 1 && (
+                      <div className="lg:hidden flex justify-center mt-6">
+                        <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center">
+                          <ArrowRight className="w-4 h-4 text-emerald-600 rotate-90" />
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               );
             })}
           </div>
+
+          {/* CTA */}
+          <div className="text-center mt-16">
+            <Link
+              href="/symptom-checker"
+              className="inline-flex items-center gap-3 px-8 py-4 bg-gray-900 text-white font-semibold rounded-2xl hover:bg-gray-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 group"
+            >
+              Try it now — it's free
+              <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Why Emerald - Split layout */}
+      <section className="py-32 bg-white relative overflow-hidden">
+        <div className="relative max-w-6xl mx-auto px-6">
+          {/* Header */}
+          <div className="max-w-2xl mb-20">
+            <h2 className="text-4xl sm:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+              Healthcare guidance
+              <br />
+              <span className="text-emerald-600">that actually helps.</span>
+            </h2>
+            <p className="text-xl text-gray-500">
+              We built this because navigating healthcare in Ireland shouldn't require a medical degree.
+            </p>
+          </div>
+
+          {/* Two column layout */}
+          <div className="grid lg:grid-cols-2 gap-12">
+            {/* Left - Main feature */}
+            <div>
+              <div className="bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-3xl p-10 h-full text-white">
+                <div className="flex items-center gap-3 mb-8">
+                  <div className="w-3 h-3 rounded-full bg-white/30" />
+                  <span className="text-emerald-100 text-sm font-medium">Powered by Gemini 2.5</span>
+                </div>
+                <h3 className="text-3xl font-bold mb-4">
+                  Describe symptoms like you'd tell a friend.
+                </h3>
+                <p className="text-emerald-100 text-lg leading-relaxed mb-8">
+                  No medical jargon. No forms to fill. Just type what's wrong and get a clear,
+                  helpful assessment in seconds.
+                </p>
+                <div className="flex flex-wrap items-center gap-3 text-sm">
+                  <span className="px-3 py-1.5 bg-white/20 rounded-lg">Text input</span>
+                  <span className="px-3 py-1.5 bg-white/20 rounded-lg">Photo upload</span>
+                  <span className="px-3 py-1.5 bg-white/20 rounded-lg">Instant analysis</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right - Feature list */}
+            <div className="space-y-6">
+              {[
+                {
+                  title: 'Your data stays yours',
+                  desc: 'Nothing leaves your browser. No accounts, no tracking, no selling your health info.',
+                  tag: 'Privacy-first'
+                },
+                {
+                  title: 'All 26 counties covered',
+                  desc: 'Find GPs, hospitals, and specialists anywhere in Ireland. One search, real results.',
+                  tag: 'Nationwide'
+                },
+                {
+                  title: 'Know when to worry',
+                  desc: 'Get clear guidance on urgency. Should you call a GP? Go to A&E? Wait it out?',
+                  tag: 'Smart triage'
+                },
+                {
+                  title: 'Always free',
+                  desc: 'No premium tier, no hidden costs. Quality healthcare guidance for everyone.',
+                  tag: 'No catch'
+                },
+              ].map((item, i) => (
+                <div key={i} className="p-6 rounded-2xl border border-gray-100 hover:border-emerald-200 hover:shadow-lg transition-all bg-white">
+                  <div className="flex items-center gap-3 mb-2">
+                    <h3 className="text-lg font-semibold text-gray-900">{item.title}</h3>
+                    <span className="text-xs text-emerald-600 font-medium bg-emerald-50 px-2 py-0.5 rounded-full">{item.tag}</span>
+                  </div>
+                  <p className="text-gray-500 leading-relaxed">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
       {/* Hospitals Section */}
-      <section className="py-24 bg-white">
+      <section className="py-32 bg-white">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
             <div>
-              <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-3">
-                Partner hospitals in Dublin
+              <span className="text-emerald-600 font-semibold text-sm tracking-wide uppercase mb-4 block">Our Network</span>
+              <h2 className="text-4xl font-bold text-gray-900 mb-3">
+                Dublin hospitals
               </h2>
               <p className="text-gray-600 text-lg">
-                Connect with leading healthcare facilities near you
+                Connect with leading healthcare facilities
               </p>
             </div>
             <Link
               href="/find-practitioner"
-              className="inline-flex items-center gap-2 text-emerald-600 font-semibold hover:text-emerald-700 transition-colors"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-emerald-50 text-emerald-700 font-semibold rounded-xl hover:bg-emerald-100 transition-colors"
             >
               View all providers
-              <ArrowRight className="w-5 h-5" />
+              <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
@@ -290,27 +358,27 @@ export default function Home() {
                 <div
                   key={i}
                   ref={ref}
-                  className={`p-6 rounded-2xl border border-gray-100 bg-white hover:shadow-lg hover:border-emerald-200 transition-all duration-300 ${
+                  className={`group p-6 rounded-2xl border border-gray-100 bg-white hover:shadow-xl hover:border-emerald-200 hover:-translate-y-1 transition-all duration-300 ${
                     inView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
                   }`}
                   style={{ transitionDelay: `${i * 100}ms` }}
                 >
                   <div className="flex items-start justify-between mb-4">
-                    <h3 className="font-semibold text-gray-900 text-lg leading-tight">{hospital.name}</h3>
-                    <div className="flex items-center gap-1 text-amber-500">
-                      <Star className="w-4 h-4 fill-current" />
-                      <span className="text-sm font-medium">{hospital.rating}</span>
+                    <h3 className="font-bold text-gray-900 leading-tight">{hospital.name}</h3>
+                    <div className="flex items-center gap-1 text-amber-500 bg-amber-50 px-2 py-1 rounded-lg">
+                      <Star className="w-3.5 h-3.5 fill-current" />
+                      <span className="text-xs font-bold">{hospital.rating}</span>
                     </div>
                   </div>
 
-                  <div className="space-y-2 text-sm text-gray-500 mb-4">
+                  <div className="space-y-2 text-sm text-gray-500 mb-5">
                     <div className="flex items-center gap-2">
-                      <MapPin className="w-4 h-4 text-emerald-600" />
-                      {hospital.address}
+                      <MapPin className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                      <span className="truncate">{hospital.address}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Clock className="w-4 h-4 text-emerald-600" />
-                      <span className={hospital.isOpen ? 'text-emerald-600 font-medium' : 'text-gray-500'}>
+                      <Clock className="w-4 h-4 text-emerald-600 flex-shrink-0" />
+                      <span className={`font-medium ${hospital.isOpen ? 'text-emerald-600' : 'text-gray-400'}`}>
                         {hospital.isOpen ? 'Open now' : 'Closed'}
                       </span>
                     </div>
@@ -320,7 +388,7 @@ export default function Home() {
                     href={hospital.website}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm text-emerald-600 font-medium hover:text-emerald-700 transition-colors"
+                    className="inline-flex items-center gap-1 text-sm text-emerald-600 font-semibold hover:text-emerald-700 transition-colors"
                   >
                     Visit website
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -333,59 +401,82 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-emerald-600">
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-            Ready to take control of your health?
+      <section className="py-32 bg-gradient-to-br from-emerald-600 via-emerald-600 to-emerald-700 relative overflow-hidden">
+        {/* Decorative elements */}
+        <div className="absolute inset-0">
+          <div className="absolute top-10 left-10 w-40 h-40 border border-white/10 rounded-full" />
+          <div className="absolute bottom-10 right-10 w-60 h-60 border border-white/10 rounded-full" />
+          <div className="absolute top-1/2 left-1/4 w-32 h-32 border border-white/5 rounded-full" />
+        </div>
+
+        <div className="relative max-w-4xl mx-auto px-6 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/10 rounded-full text-emerald-100 text-sm font-medium mb-8 backdrop-blur-sm">
+            <CheckCircle2 className="w-4 h-4" />
+            No signup required
+          </div>
+
+          <h2 className="text-4xl sm:text-5xl font-bold text-white mb-6 leading-tight">
+            Ready to understand
+            <br />your health better?
           </h2>
-          <p className="text-xl text-emerald-100 mb-10 max-w-2xl mx-auto">
-            Join over 50,000 Irish users who trust Emerald Health for reliable symptom analysis and healthcare connections.
+          <p className="text-xl text-emerald-100 mb-12 max-w-2xl mx-auto">
+            Take the first step. It's free, private, and takes less than a minute.
           </p>
           <Link
             href="/symptom-checker"
-            className="inline-flex items-center justify-center gap-2 px-10 py-5 bg-white text-emerald-600 font-semibold text-lg rounded-xl hover:bg-emerald-50 transition-colors shadow-lg"
+            className="group inline-flex items-center justify-center gap-3 px-10 py-5 bg-white text-emerald-600 font-bold text-lg rounded-2xl hover:bg-emerald-50 transition-all shadow-2xl hover:-translate-y-1"
           >
-            Start Your Free Analysis
-            <ArrowRight className="w-6 h-6" />
+            Start Your Free Check
+            <ArrowRight className="w-5 h-5 transition-transform group-hover:translate-x-1" />
           </Link>
-          <p className="mt-6 text-emerald-200 text-sm">
-            No signup required. Your data stays private.
-          </p>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white py-16">
+      <footer className="bg-gray-900 text-white py-20">
         <div className="max-w-6xl mx-auto px-6">
-          <div className="grid md:grid-cols-4 gap-12 mb-12">
+          <div className="grid md:grid-cols-4 gap-12 mb-16">
             <div className="md:col-span-2">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center">
-                  <span className="text-white font-bold text-lg">E</span>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-emerald-600 flex items-center justify-center">
+                  <span className="text-white font-bold text-xl">E</span>
                 </div>
-                <span className="font-semibold text-xl">Emerald Health</span>
+                <span className="font-bold text-2xl">Emerald Health</span>
               </div>
-              <p className="text-gray-400 leading-relaxed max-w-md">
-                Empowering Irish families with intelligent health insights.
-                We believe everyone deserves access to quality healthcare information.
+              <p className="text-gray-400 leading-relaxed max-w-sm mb-6">
+                AI-powered health insights for Irish families.
+                Built with care during the Google Student AI Hackathon in Dublin.
               </p>
+              <div className="flex items-center gap-2">
+                <span className="inline-block w-8 h-5 rounded overflow-hidden shadow">
+                  <div className="h-full flex">
+                    <div className="w-1/3 bg-emerald-500" />
+                    <div className="w-1/3 bg-white" />
+                    <div className="w-1/3 bg-orange-500" />
+                  </div>
+                </span>
+                <span className="text-gray-500 text-sm">Made in Ireland</span>
+              </div>
             </div>
 
             <div>
-              <h4 className="font-semibold mb-4">Services</h4>
-              <nav className="space-y-3">
+              <h4 className="font-bold text-lg mb-6">Services</h4>
+              <nav className="space-y-4">
                 <Link href="/symptom-checker" className="block text-gray-400 hover:text-white transition-colors">
                   Symptom Checker
                 </Link>
                 <Link href="/find-practitioner" className="block text-gray-400 hover:text-white transition-colors">
                   Find Healthcare
                 </Link>
+                <Link href="/contact-gp" className="block text-gray-400 hover:text-white transition-colors">
+                  Contact GP
+                </Link>
               </nav>
             </div>
 
             <div>
-              <h4 className="font-semibold mb-4">Legal</h4>
-              <nav className="space-y-3">
+              <h4 className="font-bold text-lg mb-6">Legal</h4>
+              <nav className="space-y-4">
                 <Link href="/privacy" className="block text-gray-400 hover:text-white transition-colors">
                   Privacy Policy
                 </Link>
@@ -398,21 +489,23 @@ export default function Home() {
 
           <div className="pt-8 border-t border-gray-800 flex flex-col md:flex-row justify-between items-center gap-4">
             <span className="text-gray-500 text-sm">
-              © {new Date().getFullYear()} Emerald Health. Made with care in Ireland.
+              © {new Date().getFullYear()} Emerald Health. All rights reserved.
             </span>
-            <div className="flex items-center gap-2 text-gray-500 text-sm">
-              <span className="inline-block w-6 h-4 rounded-sm overflow-hidden">
-                <div className="h-full flex">
-                  <div className="w-1/3 bg-emerald-600" />
-                  <div className="w-1/3 bg-white" />
-                  <div className="w-1/3 bg-orange-500" />
-                </div>
-              </span>
+            <span className="text-gray-600 text-sm">
               Serving all 26 counties
-            </div>
+            </span>
           </div>
         </div>
       </footer>
+
+      {/* CSS for underline animation */}
+      <style jsx>{`
+        @keyframes draw {
+          to {
+            stroke-dashoffset: 0;
+          }
+        }
+      `}</style>
     </div>
   );
 }

@@ -182,7 +182,5 @@ PRs welcome.
 ---
 
 <p align="center">
-  <img src="public/demo/irish-flag.png" alt="🇮🇪" width="40"/><br/>
-  <strong>Built in Dublin</strong><br/>
   Google Student AI Hackathon 2025
 </p>

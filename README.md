@@ -170,7 +170,7 @@ Open [localhost:3000](http://localhost:3000)
 
 ---
 
-PRs welcome.
+
 
 ---
 

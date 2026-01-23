@@ -170,13 +170,6 @@ Open [localhost:3000](http://localhost:3000)
 
 ---
 
-## What's Next
-
-- [ ] Irish language support (Gaeilge)
-- [ ] Symptom history tracking
-- [ ] Mental health resources
-- [ ] HSE API integration
-
 PRs welcome.
 
 ---

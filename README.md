@@ -66,17 +66,9 @@ Emergency numbers you might actually need (999, HSE Live, Samaritans, Poisons Ce
 
 ---
 
-## Tech
+## Tech Stack 
 
-| Layer | Stack |
-|-------|-------|
-| Framework | Next.js |
-| Language | TypeScript |
-| Styling | Tailwind CSS |
-| Components | Radix UI + shadcn/ui |
-| AI | Google Gemini 2.5 Flash |
-| Forms | React Hook Form + Zod |
-| Hosting | Vercel |
+TypeScript, JavaScript, HTML, CSS, Gemini API, Vercel. 
 
 <p align="center">
   <img src="https://skillicons.dev/icons?i=typescript,react,nextjs,tailwind,vercel&theme=light" alt="Tech Stack"/>

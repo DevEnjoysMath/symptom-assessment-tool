@@ -15,7 +15,6 @@
 </p>
 
 <p align="center">
-  <a href="https://emerald-health.vercel.app](https://emerald-helath-google-student-ai-hackathon-9a34-6ahj9998l.vercel.app">🌐 Live Demo</a>
 </p>
 
 ---

@@ -68,26 +68,18 @@ Emergency numbers you might actually need (999, HSE Live, Samaritans, Poisons Ce
 
 ## Tech Stack 
 
-TypeScript, JavaScript, HTML, CSS, Gemini API, Vercel. 
+TypeScript, JavaScript, HTML, CSS, Gemini API, Vercel
 
 <p align="center">
   <img src="https://skillicons.dev/icons?i=typescript,react,nextjs,tailwind,vercel&theme=light" alt="Tech Stack"/>
 </p>
 
-### Why these choices?
-
-- **TypeScript** because healthcare data shouldn't have "undefined is not a function" bugs
-- **Tailwind** because we had 48 hours and couldn't afford to fight CSS
-- **Gemini 2.5 Flash** because it's fast, multimodal (reads images), and we were at a Google hackathon
-- **Vercel** because one-click deploys when you're running on 4 hours of sleep
-
----
 
 ## My Role
 
-I did the backend and AI integration:
+I worked on the backend and AI integration:
 
-**API stuff**
+**APIs**
 - Wired up Google's Generative AI SDK
 - Built the symptom analysis flow
 - Set up error handling so it fails gracefully
@@ -120,14 +112,13 @@ const model = genAI.getGenerativeModel({
 ## Learnings
 
 **What worked:**
-- Splitting by expertise - everyone owned their thing
-- Building the AI first, UI second - we knew the core worked before making it pretty
+- We divided tasks according to everyone's strenghts
+- Building the AI first, UI second. We knew the core worked before making it pretty
 - Saying no to features - rejected probably 10+ ideas to ship 3 good ones
 
 **What was hard:**
-- Gemini rate limits during testing (burned through quota fast)
 - The weight of knowing people might use this for real health decisions
-- Making the powerpoint and presenting it to the judges (Yes, we underestimated this part a little)
+- Making a nice powerpoint! (Yes, we underestimated this part a little and didn't allocate a lot of time for this)
 
 ---
 
@@ -155,8 +146,8 @@ Open [localhost:3000](http://localhost:3000)
 </p>
 
 <p align="center">
-  5 strangers → teammates → actually friends now<br/>
-  <sub>Thanks to Google for organizing and the Dublin office for hosting. The office is unreal btw.</sub>
+  Walked in as strangers and ended up becoming friends :)<br/>
+  <sub>A special thanks to our mentor, Aiden Molloy for all his guidance throughout the hackathon. (and Google organizing this event. The office is unreal btw.)</sub>
 </p>
 
 ---

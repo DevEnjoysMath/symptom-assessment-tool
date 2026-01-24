@@ -147,7 +147,7 @@ Open [localhost:3000](http://localhost:3000)
 
 <p align="center">
   Walked in as strangers and ended up becoming friends :)<br/>
-  <sub>A special thanks to our mentor, Aiden Molloy for all his guidance throughout the hackathon. (and Google organizing this event. The office is unreal btw.)</sub>
+  <sub>A special thanks to our mentor, Aiden Molloy for all his guidance throughout the hackathon. (and Google organizing this event. The office is unreal btw).</sub>
 </p>
 
 ---

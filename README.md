@@ -71,7 +71,7 @@ Emergency numbers you might actually need (999, HSE Live, Samaritans, Poisons Ce
 
 | Layer | Stack |
 |-------|-------|
-| Framework | Next.js 16 |
+| Framework | Next.js |
 | Language | TypeScript |
 | Styling | Tailwind CSS |
 | Components | Radix UI + shadcn/ui |
